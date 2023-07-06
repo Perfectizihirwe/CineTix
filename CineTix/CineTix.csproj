@@ -6,4 +6,18 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.0.1" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Server\Controllers\" />
+    <Folder Include="Server\CQRS\" />
+    <Folder Include="Server\DbContext\" />
+    <Folder Include="Server\Models\" />
+    <Folder Include="Server\DTO\" />
+    <Folder Include="Server\Services\" />
+  </ItemGroup>
+
 </Project>
