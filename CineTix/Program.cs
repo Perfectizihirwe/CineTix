@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Azure.Cosmos;
+using CineTix.Server.Database;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddTransient<Cosmos>();
+builder.Services.AddTransient<Movies>();
 
 var app = builder.Build();
 
