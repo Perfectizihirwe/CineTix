@@ -13,9 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Server\Controllers\" />
     <Folder Include="Server\DTO\" />
-    <Folder Include="Server\Services\" />
   </ItemGroup>
 
 </Project>

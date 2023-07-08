@@ -1,18 +1,20 @@
 ﻿@page "/counter"
+@using CineTix.Server.Models;
+@using CineTix.Server.Services;
+@using CineTix.Server.CQRS.Query;
+@inject IMoviesServices MoviesService;
 
 <PageTitle>Counter</PageTitle>
 
 <h1>Counter</h1>
 
-<p role="status">Current count: @currentCount</p>
-
-<button class="btn btn-primary" @onclick="IncrementCount">Click me</button>
 
 @code {
-    private int currentCount = 0;
+	public GetMovies.Response response { get; set; }
 
-    private void IncrementCount()
-    {
-        currentCount++;
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		response = await MoviesService.GetAllMovies();
+		Console.WriteLine("====================" + response.res);
+	}
 }

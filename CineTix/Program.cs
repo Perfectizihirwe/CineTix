@@ -1,15 +1,17 @@
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
-using Microsoft.Azure.Cosmos;
-using CineTix.Server.Database;
+using CineTix.Server.DatabaseConfig;
+using CineTix.Server.Services;
+using MediatR;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddTransient<Cosmos>();
-builder.Services.AddTransient<Movies>();
+builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+builder.Services.AddScoped<Cosmos>();
+builder.Services.AddScoped<Movies>();
+builder.Services.AddScoped<IMoviesServices, MoviesServices>();
 
 var app = builder.Build();
 
