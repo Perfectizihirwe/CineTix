@@ -1,0 +1,48 @@
+﻿@page "/movies"
+@using CineTix.Server.Models;
+@using CineTix.Server.Services;
+@using CineTix.Server.CQRS.Query;
+@inject IMoviesServices MoviesService;
+
+<PageTitle>Movies</PageTitle>
+
+<h1>Movies</h1>
+<div style="display: flex; flex-direction: column; width: 100%; justify-content: center;align-items: center;">
+	@foreach (var movie in allMovies)
+	{
+		<div style="display:flex;flex-direction:row;width: 60%;height: 30vh; margin: 3vh 0; border-bottom-color: #252525;border-bottom-width: 2px;border-bottom-style: solid ">
+			<div style="display: flex;justify-content: center;align-items: center;background: #151f42; height: 90%">
+				<img width="200px" src="https://i.ibb.co/QCVQ2jP/Cinetix.png" />
+			</div>
+			<div style="padding: 1rem">
+				<a style="color:#560e6f;font-size:30px " href="/details/@movie.Id">@movie?.Title</a>
+				<p>@movie?.Genre | @movie.Year</p>
+				<p>Cast: @movie?.Cast</p>
+				<div style="display:flex; flex-direction: row; width: 100%;background:#f2f2f2; border-radius: 10px; height: 7vh">
+					@foreach(var time in movie.RunningTimes.mon)
+					{
+						<p onMouseOut="this.style.background='#560e6f'" onMouseOver="this.style.background='#ffbe31'" style="margin: 0.5rem; padding: 0.5rem; background: #560e6f; color: #fff; border-radius: 10px;cursor: pointer;">@time</p>
+					}
+				</div>
+			</div>
+		</div>
+	}
+</div>
+
+
+
+@code {
+	public GetMovies.Response response { get; set; }
+	public GetOneMovie.Response oneResponse { get; set; }
+	public List<Movie> allMovies = new List<Movie>();
+	public Movie OneMovie = new Movie();
+	protected override async Task OnInitializedAsync()
+	{
+		response = await MoviesService.GetAllMovies();
+		allMovies = response.res;
+		//oneResponse = await MoviesService.GetOneMovie("2456786543");
+		//OneMovie = oneResponse.res;
+		//Console.WriteLine("********************" + OneMovie);
+		Console.WriteLine("====================" + allMovies);
+	}
+}

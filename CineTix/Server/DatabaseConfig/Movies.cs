@@ -8,19 +8,23 @@ namespace CineTix.Server.DatabaseConfig
         private string CosmosDbContainerName = "Movies";
         public Container containerClient;
         private readonly Cosmos cosmos;
+        public CosmosClient cosmosDbClient;
 
-        public Movies(Cosmos cosmos)
+
+		public Movies(Cosmos cosmos)
         {
             this.cosmos = cosmos;
         }
 
-        public async Task<Container> MovieContainer()
+        public async Task ConnectDBAsync()
         {
-            CosmosClient cosmosDbClient = await cosmos.ConnectDbAsync();
-			containerClient = await cosmos.database.CreateContainerIfNotExistsAsync(CosmosDbContainerName, "/id", 400);
-			Console.WriteLine("Created Container: {0}\n", this.containerClient.Id);
+            cosmosDbClient = await cosmos.ConnectDbAsync();
+        }
+
+		public Container MovieContainer()
+        {
 			containerClient = cosmosDbClient.GetContainer(CosmosDbName, CosmosDbContainerName);
             return containerClient;
         }
-    }
+	}
 }

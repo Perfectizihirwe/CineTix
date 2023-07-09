@@ -17,14 +17,15 @@ namespace CineTix.Server.CQRS.Query
             private readonly Movies _movies;
             public Handler(Movies movies)
             {
-                _movies = movies;
+                _movies = movies;   
             }
             public async Task<Response> Handle(Query request, CancellationToken cancellationToken) {
+                await _movies.ConnectDBAsync();
                 var sqlQueryText = "SELECT * FROM c";
 
                 QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
-                    
-                FeedIterator<Movie> queryResultSetIterator = await _movies.MovieContainer<Movie>().GetItemQueryIterator<>(queryDefinition);
+                
+                FeedIterator<Movie> queryResultSetIterator = _movies.MovieContainer().GetItemQueryIterator<Movie>(queryDefinition);
                 
                 List<Movie> allMovies = new List<Movie>();
 

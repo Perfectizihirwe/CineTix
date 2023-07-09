@@ -9,7 +9,6 @@ namespace CineTix.Server.DatabaseConfig
         public IConfiguration _configuration { get; set; }
         private string CosmosDBAccountUri;
         private string CosmosDBAccountPrimaryKey;
-		public Database database;
 		private string databaseId = "CineTix";
 		public Cosmos(IConfiguration configuration) { 
             _configuration = configuration;
@@ -20,8 +19,6 @@ namespace CineTix.Server.DatabaseConfig
         public async Task<CosmosClient> ConnectDbAsync()
         {
             cosmosDbClient = new CosmosClient(CosmosDBAccountUri, CosmosDBAccountPrimaryKey);
-			this.database = await cosmosDbClient.CreateDatabaseIfNotExistsAsync(databaseId);
-			Console.WriteLine("Created Database: {0}\n", this.database.Id);
 			return cosmosDbClient;
         }
     }

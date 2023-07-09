@@ -18,5 +18,11 @@ namespace CineTix.Server.Services
             var response = await _mediator.Send(new GetMovies.Query());
 			return response;
         }
-    }
+
+        public async Task<GetOneMovie.Response> GetOneMovie(string id)
+        {
+            var response = await _mediator.Send(new GetOneMovie.Query(id));
+            return response;
+        }
+	}
 }

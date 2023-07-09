@@ -6,19 +6,26 @@ namespace CineTix.Server.Models
         [JsonProperty("id")]
         public string Id { get; set; } = Guid.NewGuid().ToString();
 
-        public string Title { get; set; }
+		[JsonProperty("title")]
+		public string Title { get; set; }
 
-        public int Year { get; set; }
+		[JsonProperty("year")]
+		public int Year { get; set; }
 
-        public string Director { get; set; }
+		[JsonProperty("director")]
+		public string Director { get; set; }
 
-        public string Cast { get; set; }
+		[JsonProperty("cast")]
+		public string Cast { get; set; }
 
-        public string Genre { get; set; }
+		[JsonProperty("genre")]
+		public string Genre { get; set; }
 
-        public string Notes { get; set; }
+		[JsonProperty("notes")]
+		public string Notes { get; set; }
 
-        public Time[] RunningTimes { get; set; }
+        [JsonProperty("runningTimes")]
+		public Time RunningTimes { get; set; }
     }
 
     public class Time

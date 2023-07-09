@@ -7,5 +7,7 @@ namespace CineTix.Server.Services
 	{
 		Task<GetMovies.Response> GetAllMovies();
 
+		Task<GetOneMovie.Response> GetOneMovie(string id);
+
 	}
 }

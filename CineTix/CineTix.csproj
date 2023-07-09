@@ -16,4 +16,8 @@
     <Folder Include="Server\DTO\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\assets\images\Cinetix.png" />
+  </ItemGroup>
+
 </Project>
