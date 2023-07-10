@@ -25,7 +25,8 @@ namespace CineTix.Server.CQRS.Query
 				await _movies.ConnectDBAsync();
 
 				try {
-				ItemResponse<Movie> response = await _movies.MovieContainer().ReadItemAsync<Movie>(request.id, new Microsoft.Azure.Cosmos.PartitionKey("/Title"));
+				Console.WriteLine(request.id + "This is the ID");
+				ItemResponse<Movie> response = await _movies.MovieContainer().ReadItemAsync<Movie>(id:request.id, new Microsoft.Azure.Cosmos.PartitionKey("/title"));
 				
 				return new Response(response.Resource);
 				} catch (CosmosException ex)

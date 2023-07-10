@@ -10,9 +10,9 @@
 <div style="display: flex; flex-direction: column; width: 100%; justify-content: center;align-items: center;">
 	@foreach (var movie in allMovies)
 	{
-		<div style="display:flex;flex-direction:row;width: 60%;height: 30vh; margin: 3vh 0; border-bottom-color: #252525;border-bottom-width: 2px;border-bottom-style: solid ">
-			<div style="display: flex;justify-content: center;align-items: center;background: #151f42; height: 90%">
-				<img width="200px" src="https://i.ibb.co/QCVQ2jP/Cinetix.png" />
+		<div style="display:flex;flex-direction:row;width: 60%; margin: 3vh 0; border-bottom-color: #252525;border-bottom-width: 2px;border-bottom-style: solid ">
+			<div style="display: flex;justify-content: center;align-items: center;background: #151f42; height: 25vh">
+				<img width="200" src="https://i.ibb.co/QCVQ2jP/Cinetix.png" />
 			</div>
 			<div style="padding: 1rem">
 				<a style="color:#560e6f;font-size:30px " href="/details/@movie.Id">@movie?.Title</a>
@@ -40,9 +40,6 @@
 	{
 		response = await MoviesService.GetAllMovies();
 		allMovies = response.res;
-		//oneResponse = await MoviesService.GetOneMovie("2456786543");
-		//OneMovie = oneResponse.res;
-		//Console.WriteLine("********************" + OneMovie);
 		Console.WriteLine("====================" + allMovies);
 	}
 }
