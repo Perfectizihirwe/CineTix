@@ -6,14 +6,19 @@
 
 
 <div style="margin: 0;padding: 0;display: flex;flex-direction: column;justify-content: center;align-items: center;">
+    @if (OneMovie != null)
+        {
     <div>
         <img src="https://i.ibb.co/QCVQ2jP/Cinetix.png" style="width: 80vw" />
     </div>
     <div style="display: flex;flex-direction: column;padding: 20px;width: 75%;">
-        <h1 style="padding: 10px;border-top: solid 1px #222;border-bottom: solid 1px #222; color: #560e6f">Title of the movie goes here</h1>
-    <p style="padding:20px 0">
-            In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before final copy is available. Wikipedia
+        <h1 style="padding: 10px;border-top: solid 1px #222;border-bottom: solid 1px #222; color: #560e6f">@OneMovie.Title</h1>
+    <p style="padding:10px 0">
+            @OneMovie.Notes
     </p>
+        <p>
+           Cast: @OneMovie.Cast
+        </p>
         <div style="background: #560e6f;display: flex;flex-direction: column;justify-content: center;align-items:center;">
             <h1 style="color: #fff">SHOW TIMES</h1>
     </div>
@@ -27,12 +32,14 @@
         <option value="sat">Saturday</option>
         <option value="sun">Sunday</option>
     </select>
-        <div style="display:flex; flex-direction: row; width: 100%;background:#f2f2f2; border-radius: 10px; height: 7vh">
-            @*@foreach (var time in movie.RunningTimes.mon)*@
-            @*{*@
-                <p onMouseOut="this.style.background='#560e6f'" onMouseOver="this.style.background='#ffbe31'" style="margin: 0.5rem; padding: 0.5rem; background: #560e6f; color: #fff; border-radius: 10px;cursor: pointer;">20: 07</p>
-            @*}*@
-        </div>
+        
+            <div style="display:flex; flex-direction: row; width: 100%;background:#f2f2f2; border-radius: 10px; height: 7vh">
+                @foreach (var time in OneMovie.RunningTimes.GetType().GetProperty(selectedDay)?.GetValue(OneMovie.RunningTimes) as string[])
+                {
+                    <p onMouseOut="this.style.background='#560e6f'" onMouseOver="this.style.background='#ffbe31'" style="margin: 0.5rem; padding: 0.5rem; background: #560e6f; color: #fff; border-radius: 10px;cursor: pointer;">@time</p>
+                }
+            </div>
+        
         <div style="display: flex;flex-direction:column;">
 
         @for(int i=0; i<seats.Length; i++)
@@ -50,7 +57,13 @@
                 </div>
 }
     </div>
-    </div>
+        </div>
+    } else
+    {
+        <div>
+            Loading....
+        </div>
+    }
 </div>
 
 @code {
@@ -58,14 +71,14 @@
     public string MovieId { get; set; }
     public GetOneMovie.Response oneResponse { get; set; }
     public string selectedDay { get; set; } = "mon";
-    public Movie OneMovie = new Movie();
+    public Movie OneMovie = null;
     protected override async Task OnInitializedAsync()
     {
         oneResponse = await MoviesService.GetOneMovie(MovieId);
-        OneMovie = oneResponse.res;
+        OneMovie = oneResponse.Res;
         Console.WriteLine("********************" + OneMovie);
+        Console.WriteLine("selected day" + selectedDay);
     }
-
     public string[][] seats = new string[2][]{
                 new string[7]{"1A", "2A", "3A", "4A", "5A", "6A", "7A"},
 

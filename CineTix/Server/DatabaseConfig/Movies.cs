@@ -16,9 +16,9 @@ namespace CineTix.Server.DatabaseConfig
             this.cosmos = cosmos;
         }
 
-        public async Task ConnectDBAsync()
+        public void ConnectDBAsync()
         {
-            cosmosDbClient = await cosmos.ConnectDbAsync();
+            cosmosDbClient = cosmos.ConnectDbAsync();
         }
 
 		public Container MovieContainer()

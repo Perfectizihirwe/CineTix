@@ -20,7 +20,7 @@ namespace CineTix.Server.CQRS.Query
                 _movies = movies;   
             }
             public async Task<Response> Handle(Query request, CancellationToken cancellationToken) {
-                await _movies.ConnectDBAsync();
+                _movies.ConnectDBAsync();
                 var sqlQueryText = "SELECT * FROM c";
 
                 QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
