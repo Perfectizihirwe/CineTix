@@ -1,5 +1,4 @@
 ﻿using Microsoft.Azure.Cosmos;
-using System.Configuration;
 
 namespace CineTix.Server.DatabaseConfig
 {

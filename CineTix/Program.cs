@@ -10,8 +10,9 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
 builder.Services.AddScoped<Cosmos>();
-builder.Services.AddScoped<Movies>();
+builder.Services.AddScoped<Cinema>();
 builder.Services.AddScoped<IMoviesServices, MoviesServices>();
+builder.Services.AddScoped<ITicketServices, TicketServices>();
 
 var app = builder.Build();
 

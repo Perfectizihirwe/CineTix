@@ -5,12 +5,12 @@ using CineTix.Server.Models;
 
 namespace CineTix.Server.CQRS.Query
 {
-	public class GetMovies
+	public class GetTickets
 	{
 
 		public record Query : IRequest<Response>;
 
-		public record Response(List<Models.Movie> res);
+		public record Response(List<Ticket> res);
 
 		public class Handler : IRequestHandler<Query, Response>
 		{
@@ -26,20 +26,20 @@ namespace CineTix.Server.CQRS.Query
 
 				QueryDefinition queryDefinition = new QueryDefinition(sqlQueryText);
 
-				FeedIterator<Models.Movie> queryResultSetIterator = _db.MovieContainer().GetItemQueryIterator<Models.Movie>(queryDefinition);
+				FeedIterator<Ticket> queryResultSetIterator = _db.TicketContainer().GetItemQueryIterator<Ticket>(queryDefinition);
 
-				List<Models.Movie> allMovies = new List<Models.Movie>();
+				List<Ticket> allTickets = new List<Ticket>();
 
 				while (queryResultSetIterator.HasMoreResults)
 				{
-					FeedResponse<Models.Movie> currentResultSet = await queryResultSetIterator.ReadNextAsync();
-					foreach (Models.Movie oneMovie in currentResultSet)
+					FeedResponse<Ticket> currentResultSet = await queryResultSetIterator.ReadNextAsync();
+					foreach (Ticket ticket in currentResultSet)
 					{
-						allMovies.Add(oneMovie);
+						allTickets.Add(ticket);
 					}
 				}
 
-				return new Response(allMovies);
+				return new Response(allTickets);
 			}
 		}
 	}

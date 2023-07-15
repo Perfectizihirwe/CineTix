@@ -2,16 +2,17 @@
 
 namespace CineTix.Server.DatabaseConfig
 {
-    public class Movies
+    public class Cinema
     {
         private string CosmosDbName = "CineTix";
-        private string CosmosDbContainerName = "Movies";
+        private string CosmosDbMoviesContainerName = "Movies";
+        private string CosmosDbTicketsContainerName = "Tickets";
         public Container containerClient;
         private readonly Cosmos cosmos;
         public CosmosClient cosmosDbClient;
 
 
-		public Movies(Cosmos cosmos)
+		public Cinema(Cosmos cosmos)
         {
             this.cosmos = cosmos;
         }
@@ -23,8 +24,14 @@ namespace CineTix.Server.DatabaseConfig
 
 		public Container MovieContainer()
         {
-			containerClient = cosmosDbClient.GetContainer(CosmosDbName, CosmosDbContainerName);
+			containerClient = cosmosDbClient.GetContainer(CosmosDbName, CosmosDbMoviesContainerName);
             return containerClient;
         }
-	}
+
+        public Container TicketContainer()
+        {
+            containerClient = cosmosDbClient.GetContainer(CosmosDbName, CosmosDbTicketsContainerName);
+            return containerClient;
+        }
+    }
 }

@@ -2,7 +2,9 @@
 @using CineTix.Server.Models;
 @using CineTix.Server.Services;
 @using CineTix.Server.CQRS.Query;
+@inject NavigationManager NavManager;
 @inject IMoviesServices MoviesService;
+@inject ITicketServices TicketService;
 
 
 <div style="margin: 0;padding: 0;display: flex;flex-direction: column;justify-content: center;align-items: center;">
@@ -23,7 +25,7 @@
             <h1 style="color: #fff">SHOW TIMES</h1>
     </div>
         <p style="padding:10px 0;">Select a day to see times</p>
-        <select style="padding: 10px; margin: 10px 0;" @bind="selectedDay" @bind:event="onchange">
+        <select name="daySelector" style="padding: 10px; margin: 10px 0;" @bind="selectedDay" @bind:event="onchange">
         <option value="mon">Monday</option>
         <option value="tue">Tuesday</option>
         <option value="wed">Wednesday</option>
@@ -36,10 +38,17 @@
             <div style="display:flex; flex-direction: row; width: 100%;background:#f2f2f2; border-radius: 10px; height: 7vh">
                 @foreach (var time in OneMovie.RunningTimes.GetType().GetProperty(selectedDay)?.GetValue(OneMovie.RunningTimes) as string[])
                 {
-                    <p onMouseOut="this.style.background='#560e6f'" onMouseOver="this.style.background='#ffbe31'" style="margin: 0.5rem; padding: 0.5rem; background: #560e6f; color: #fff; border-radius: 10px;cursor: pointer;">@time</p>
+                    @if(time == selectedTime)
+                    {
+                        <p style="margin: 0.5rem; padding: 0.5rem; background: #ffbe31; color: #fff; border-radius: 10px;cursor: pointer;">@time</p>
+                    } else
+                    {
+                        <p @onclick="(()=>ChangeSelectedTime(time))" onMouseOut="this.style.background='#560e6f'" onMouseOver="this.style.background='#ffbe31'" style="margin: 0.5rem; padding: 0.5rem; background: #560e6f; color: #fff; border-radius: 10px;cursor: pointer;">@time</p>
+                    }
                 }
             </div>
         
+            <p style="margin-top: 10px">Click on a seat to select it</p>
         <div style="display: flex;flex-direction:column;">
 
         @for(int i=0; i<seats.Length; i++)
@@ -48,15 +57,26 @@
 
 	@for(int j=0; j < (seats[i]).Length; j++)
             {
-
-                        <img style="cursor: pointer" src="https://i.ibb.co/7Qbxq1y/cinema.png" width="70" height="70"/>
-                        <p onMouseOut="this.style.color='#fff'" onMouseOver="this.style.color='#560e6f'" style="position: relative; left: -45px; color: #fff; font-weight: bold;cursor: pointer">
+                            <div style="display: flex;flex-direction:row;justify-content:center;align-items: center;" @onclick="(()=>ChangeSelectedSeat(i,j))">
+                    
+                            <img style="cursor: pointer" src="https://i.ibb.co/7Qbxq1y/cinema.png" width="70" height="70" />
+                            <p onMouseOut="this.style.color='#fff'" onMouseOver="this.style.color='#560e6f'" style="position: relative; left: -45px; color: #fff; font-weight: bold;cursor: pointer">
                 @seats[i][j]
-        </p>
+                            </p>
+                            </div>
             }
                 </div>
 }
     </div>
+    
+        <div style="display: flex;flex-direction:column;">
+            <p>Enter your details to book your ticket</p>
+            <label for="holderName" ></label>
+                <input name="holderName" placeholder="Enter your name" @bind="holderName" @bind:event="onchange" />
+        </div>
+        <p>You have selected seat @selectedSeat</p>
+
+            <button style="background: #560e6f; color: #fff; padding: 10px; border-radius: 10px" @onclick="BookTicket">Book your ticket</button>
         </div>
     } else
     {
@@ -71,7 +91,22 @@
     public string MovieId { get; set; }
     public GetOneMovie.Response oneResponse { get; set; }
     public string selectedDay { get; set; } = "mon";
+    public string selectedTime { get; set; }
+    public string holderName { get; set; }
+    public string selectedSeat { get; set; }
     public Movie OneMovie = null;
+
+    public void ChangeSelectedTime(string time)
+    {
+        selectedTime = time;
+    }
+
+    public void ChangeSelectedSeat(int i, int j)
+    {
+        Console.WriteLine("i" + i + "j" + j);
+        selectedSeat = seats[1][3];
+    }
+
     protected override async Task OnInitializedAsync()
     {
         oneResponse = await MoviesService.GetOneMovie(MovieId);
@@ -79,7 +114,14 @@
         Console.WriteLine("********************" + OneMovie);
         Console.WriteLine("selected day" + selectedDay);
     }
-    public string[][] seats = new string[2][]{
+
+    public async Task BookTicket()
+    {
+       await TicketService.AddTicketAsync(OneMovie.Title,holderName, selectedDay, selectedTime, selectedSeat);
+        NavManager.NavigateTo("/tickets");
+    }
+
+    public string[][] seats = new string[][]{
                 new string[7]{"1A", "2A", "3A", "4A", "5A", "6A", "7A"},
 
                 new string[8]{"1B", "2B", "3B", "4B", "5B", "6B", "7B", "8B"}
