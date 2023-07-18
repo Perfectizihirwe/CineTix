@@ -21,7 +21,7 @@
 </div>
 
 @code {
-	public GetTickets.Response response { get; set; }
+	public GetTickets.Response response { get; set; } = null;
 	public List<Ticket> allTickets = new List<Ticket>();
 	protected override async Task OnInitializedAsync()
 	{

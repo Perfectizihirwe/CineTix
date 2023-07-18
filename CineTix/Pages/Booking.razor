@@ -1,0 +1,103 @@
+﻿@page "/booking"
+@using CineTix.Server.Models
+@inject Blazored.LocalStorage.ILocalStorageService localStorage;
+@inject IToastService toastService
+@inject NavigationManager NavManager;
+
+<PageTitle>Booking</PageTitle>
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+
+    @if (selectedDayTime != null && selectedMovie != null)
+{
+        <h1>Booking tickets for @selectedMovie on @selectedDayTime?.ToUpper()</h1>
+
+    <span>Select the tickets you want</span>
+
+        <div style="display: flex; flex-direction: row; width: 30%;justify-content: space-between; background: gainsboro; padding: 1rem;margin-bottom: 1rem; margin-top: 1rem ">
+        <div style="display: flex; flex-direction: column">
+                <h1 style="color: #560e6f">ADULT</h1>
+            <p>Price: 10,000 RWF</p>
+        </div>
+        <div style="display: flex; flex-direction: row;">
+            <div style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+                    <p style="font-size: 40px; padding-right: 10px">@adultTickets</p>
+            </div>
+            <div style="display: flex; flex-direction: column; gap: 10px">
+                <button @onclick="(()=>changeAdultTickets('+'))">+</button>
+                <button @onclick="(()=>changeAdultTickets('-'))">-</button>
+            </div>
+        </div>
+
+    </div>
+        <div style="display: flex; flex-direction: row; width: 30%;justify-content: space-between; background: gainsboro; padding: 1rem ">
+            <div style="display: flex; flex-direction: column">
+                <h1 style="color: #560e6f">CHILDREN</h1>
+                <p>Price: 5,000 RWF</p>
+            </div>
+            <div style="display: flex; flex-direction: row;">
+                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+                    <p style="font-size: 40px; padding-right: 10px">@childTickets</p>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 10px">
+                    <button @onclick="(()=>changeChildTickets('+'))">+</button>
+                    <button @onclick="(()=>changeChildTickets('-'))">-</button>
+                </div>
+            </div>
+
+        </div>
+
+        <div>
+            <button @onclick="navigateToSeats" style="margin: 0.5rem; padding: 0.5rem; background: #560e6f; color: #fff; border-radius: 10px;cursor: pointer;">
+                Select seats
+            </button>
+            </div>
+}
+
+</div>
+
+@code {
+    public string selectedDayTime { get; set; } = null;
+    public string selectedMovie { get; set; } = null;
+    public int adultTickets { get; set; } = 0;
+    public int childTickets { get; set; } = 0;
+
+    public void changeAdultTickets(char sign)
+    {
+        if(sign == '+' && (adultTickets + childTickets) < 6)
+        {
+            adultTickets += 1;
+        }
+        else if (sign == '-' && adultTickets > 0)
+        {
+            adultTickets -= 1;
+        }
+    }
+
+    public void changeChildTickets(char sign)
+    {
+        if (sign == '+' && (adultTickets + childTickets) < 6 && adultTickets > 0)
+        {
+            childTickets += 1;
+        }
+        else if (sign == '-' && childTickets > 0)
+        {
+            childTickets -= 1;
+        } else
+        {
+            toastService.ShowWarning("At least one adult must be selected in order to book a child ticket");
+        }
+    }
+
+    public async Task navigateToSeats()
+    {
+        await localStorage.SetItemAsync("childTickets", childTickets.ToString());
+        await localStorage.SetItemAsync("adultTickets", adultTickets.ToString());
+        NavManager.NavigateTo("/seatSelection");
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        selectedDayTime = await localStorage.GetItemAsync<string>("dayTime");
+        selectedMovie = await localStorage.GetItemAsync<string>("selectedMovie");
+    }
+}

@@ -3,6 +3,8 @@
 @using CineTix.Server.Services;
 @using CineTix.Server.CQRS.Query;
 @inject IMoviesServices MoviesService;
+@inject NavigationManager NavManager;
+@inject Blazored.LocalStorage.ILocalStorageService localStorage;
 
 <PageTitle>Movies</PageTitle>
 
@@ -15,7 +17,7 @@
 				<img width="200" src="https://i.ibb.co/QCVQ2jP/Cinetix.png" />
 			</div>
 			<div style="padding: 1rem">
-				<a style="color:#560e6f;font-size:30px " href="/details/@movie.Id">@movie?.Title</a>
+				<button @onclick="(()=>selectMovie(movie))" style="color:#560e6f;font-size:30px; text-decoration: underline; border: none; background-color: transparent;">@movie?.Title</button>
 				<p>@movie?.Genre | @movie.Year</p>
 				<p>Cast: @movie?.Cast</p>
 				<div style="display:flex; flex-direction: row; width: 100%;background:#f2f2f2; border-radius: 10px; height: 7vh">
@@ -41,5 +43,11 @@
 		response = await MoviesService.GetAllMovies();
 		allMovies = response.res;
 		Console.WriteLine("====================" + allMovies);
+	}
+
+	public void selectMovie(Movie movie)
+	{
+		NavManager.NavigateTo($"/details/{movie.Id}");
+		localStorage.SetItemAsync("selectedMovie", movie.Title.ToString());
 	}
 }

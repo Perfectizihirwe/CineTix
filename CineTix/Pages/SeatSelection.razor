@@ -1,0 +1,88 @@
+﻿@page "/seatSelection"
+@using CineTix.Server.Models
+@inject Blazored.LocalStorage.ILocalStorageService localStorage;
+@inject IToastService toastService
+@inject NavigationManager NavManager;
+
+<PageTitle>Booking</PageTitle>
+<div style="display: flex; flex-direction: column; justify-content: center; align-items: center">
+
+    @if (selectedDayTime != null && selectedMovie != null)
+{
+        <h1>Booking tickets for @selectedMovie on @selectedDayTime?.ToUpper()</h1>
+
+        <p>@adultTickets Adult tickets and @childTickets child tickets</p>
+
+        <span style="margin-top: 10px">Select the seats you want Click on a seat to select it</span>
+
+    <div style="display: flex;flex-direction:column;">
+
+    @for(int i=0; i < seats.GetLength(0); i++)
+    {
+    <div style="display: flex;flex-direction:row;justify-content:center;align-items: center; ">
+
+    @for(int j=0; j < seats.GetLength(1); j++)
+    {
+                        <div style="display: flex;flex-direction:row;justify-content:center;align-items: center;" @onclick="(()=>ChangeSelectedSeat(i,j))">
+
+                            <img style="cursor: pointer;background-color: #560e6f;margin-bottom: 3px" src="https://i.ibb.co/7Qbxq1y/cinema.png" width="70" height="70" />
+    <p onMouseOut="this.style.color='#fff'" onMouseOver="this.style.color='#560e6f'" style="position: relative; left: -45px; color: #fff; font-weight: bold;cursor: pointer">
+    @seats[i,j]
+    </p>
+    </div>
+    }
+    </div>
+    }
+    </div>
+
+    @*<div style="display: flex;flex-direction:column;">
+    <p>Enter your details to book your ticket</p>
+    <label for="holderName" ></label>
+    <input name="holderName" placeholder="Enter your name" @bind="holderName" @bind:event="onchange" />
+    </div>*@
+
+    <button style="background: #560e6f; color: #fff; padding: 10px; border-radius: 10px; margin: 20px" @onclick="BookTicket">Book your ticket</button>
+}
+
+</div>
+
+@code {
+    public string selectedDayTime { get; set; } = null;
+    public string selectedMovie { get; set; } = null;
+    public int adultTickets { get; set; } = 0;
+    public int childTickets { get; set; } = 0;
+    public Array selectedSeat { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        selectedDayTime = await localStorage.GetItemAsync<string>("dayTime");
+        selectedMovie = await localStorage.GetItemAsync<string>("selectedMovie");
+        adultTickets = Int32.Parse(await localStorage.GetItemAsync<string>("adultTickets"));
+        childTickets = Int32.Parse(await localStorage.GetItemAsync<string>("childTickets"));
+    }
+
+    public void ChangeSelectedSeat(int i, int j)
+    {
+        Console.WriteLine("i" + i + "j" + j);
+    }
+
+    public async Task BookTicket()
+    {
+        //await TicketService.AddTicketAsync(OneMovie.Title, holderName, selectedDay, selectedTime, selectedSeat);
+        NavManager.NavigateTo("/tickets");
+    }
+
+
+    public string[,] seats = {
+                {"1A", "2A", "3A", "4A", "5A", "6A", "7A", "8A", "9A", "10A"},
+                {"1B", "2B", "3B", "4B", "5B", "6B", "7B", "8B", "9B", "10B"},
+                {"1C", "2C", "3C", "4C", "5C", "6C", "7C", "8C", "9C", "10C"},
+                {"1D", "2D", "3D", "4D", "5D", "6D", "7D", "8D", "9D", "10D"},
+                {"1E", "2E", "3E", "4E", "5E", "6E", "7E", "8E", "9E", "10E"},
+                {"1F", "2F", "3F", "4F", "5F", "6F", "7F", "8F", "9F", "10F"},
+                {"1G", "2G", "3G", "4G", "5G", "6G", "7G", "8G", "9G", "10G"},
+                {"1H", "2H", "3H", "4H", "5H", "6H", "7H", "8H", "9H", "10H"},
+                {"1I", "2I", "3I", "4I", "5I", "6I", "7I", "8I", "9I", "10I"},
+                {"1J", "2J", "3J", "4J", "5J", "6J", "7J", "8J", "9J", "10J"}
+    };
+}
