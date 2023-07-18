@@ -90,9 +90,16 @@
 
     public async Task navigateToSeats()
     {
-        await localStorage.SetItemAsync("childTickets", childTickets.ToString());
-        await localStorage.SetItemAsync("adultTickets", adultTickets.ToString());
-        NavManager.NavigateTo("/seatSelection");
+        if ((adultTickets + childTickets) > 0)
+        {
+
+            await localStorage.SetItemAsync("childTickets", childTickets.ToString());
+            await localStorage.SetItemAsync("adultTickets", adultTickets.ToString());
+            NavManager.NavigateTo("/seatSelection");
+        } else
+        {
+            toastService.ShowWarning("Select atleast one ticket");
+        }
     }
 
     protected override async Task OnInitializedAsync()

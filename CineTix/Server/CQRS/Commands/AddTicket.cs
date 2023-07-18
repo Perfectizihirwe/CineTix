@@ -7,7 +7,7 @@ namespace CineTix.Server.CQRS.Commands
 {
     public class AddTicket
     {
-        public record Command(string Movie,string HolderName, string Day, string Time, string Seat) : IRequest<Guid>;
+        public record Command(string Movie,string HolderName, string HolderEmail, string Time, Array Seat) : IRequest<Guid>;
 
         public class Handler : IRequestHandler<Command, Guid>
         {
@@ -25,7 +25,7 @@ namespace CineTix.Server.CQRS.Commands
                     Id = Guid.NewGuid(),
                     Movie = request.Movie,
                     HolderName = request.HolderName,
-                    Day = request.Day,
+                    HolderEmail = request.HolderEmail,
                     Time = request.Time,
                     Seat = request.Seat
                 }, partitionKey: new PartitionKey(request.HolderName));

@@ -7,7 +7,7 @@ namespace CineTix.Server.Services
 	public interface ITicketServices
 	{
 		Task<GetTickets.Response> GetAllTickets();
-		Task<Guid> AddTicketAsync(string Movie,string HolderName, string Day, string Time, string Seat);
+		Task<Guid> AddTicketAsync(string Movie,string HolderName, string HolderEmail, string Time, Array Seat);
 
 	}
 }

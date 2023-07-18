@@ -15,6 +15,9 @@ namespace CineTix.Server.Models
 
         public string HolderName { get; set; }
 
+        [JsonProperty("holderEmail")]
+        public string HolderEmail { get; set; }
+
         [JsonProperty("name")]
         public string Day { get; set; }
 
@@ -22,6 +25,6 @@ namespace CineTix.Server.Models
         public string Time { get; set; }
 
         [JsonProperty("seat")]
-        public string Seat { get; set; }
+        public Array Seat { get; set; }
     }
 }

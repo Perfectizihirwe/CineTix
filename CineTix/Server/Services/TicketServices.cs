@@ -20,9 +20,9 @@ namespace CineTix.Server.Services
 			return response;
 		}
 
-		public async Task<Guid> AddTicketAsync(string Movie, string HolderName, string Day, string Time, string Seat)
+		public async Task<Guid> AddTicketAsync(string Movie, string HolderEmail, string HolderName, string Time, Array Seat)
         {
-            var response = await _mediator.Send(new AddTicket.Command(Movie, HolderName, Day, Time, Seat));
+            var response = await _mediator.Send(new AddTicket.Command(Movie, HolderName, HolderEmail, Time, Seat));
 			return response;
         }
     }
